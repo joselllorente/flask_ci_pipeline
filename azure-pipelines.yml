@@ -1,0 +1,31 @@
+trigger:
+- main  # Se ejecuta en cada cambio en la rama main
+
+pool:
+  vmImage: 'ubuntu-latest'  # Usa una máquina virtual con Ubuntu
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+
+- task: Docker@2
+  displayName: 'Construir la imagen Docker'
+  inputs:
+    command: build
+    Dockerfile: '**/Dockerfile'
+    repository: 'flask-app'
+    tags: latest
+
+- script: |
+    docker run -d -p 5000:5000 flask-app:latest
+    sleep 5  # Esperar que arranque Flask
+  displayName: 'Ejecutar contenedor Flask'
+
+- script: |
+    pip install -r requirements.txt
+    pytest tests/
+  displayName: 'Ejecutar Tests'
+
+- script: docker ps
+  displayName: 'Verificar contenedores en ejecución'
