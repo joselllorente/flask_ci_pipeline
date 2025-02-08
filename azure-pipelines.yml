@@ -2,12 +2,12 @@ trigger:
 - main  # Se ejecuta en cada cambio en la rama main
 
 pool:
-  vmImage: 'ubuntu-latest'  # Usa una máquina virtual con Ubuntu
+  vmImage: 'ubuntu'  # Usa una máquina virtual con Ubuntu
 
 steps:
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3.x'
+    versionSpec: '3.9'
 
 - task: Docker@2
   displayName: 'Construir la imagen Docker'
